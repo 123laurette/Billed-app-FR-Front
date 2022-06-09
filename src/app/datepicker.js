@@ -21,27 +21,27 @@ Date.prototype.getWeekNumber = function () {
 };
 
 // DATEPICKER
-class Datepicker {
-    constructor(host, s) {
+class Datepicker {  //selecteur de date
+    constructor(host, s) {  
         const t = this;
-        t.host = host;
-        t.frame = document.createElement("div");
+        t.host = host;  //hote
+        t.frame = document.createElement("div");    //cadre
         t.frame.id = "datepicker-frame";
         t.frame.className = "noselect";
         
         
         
-        // Run config if settings present
+        // Run config if settings present (executer la configuration si les paramètres sont presents)
         if (s) t.config(s); 
         
-        // Show conditions
-        window.onresize = () => { if (t.display_state) show(true); }; // to update screen position
+        // Show conditions (afficher les conditions)
+        window.onresize = () => { if (t.display_state) show(true); }; // to update screen position(pour mettre a jour la position de l'écran)
         document.addEventListener("click", e => {
             if (
                 e.target == document.getElementById("datepicker") &&
                 !document.getElementById("datepicker-frame")
             ) {
-                t.load("day"); // Start date when opening
+                t.load("day"); // Start date when opening (date de debut d'ouverture)
                 show(true);
             }
             else if (
@@ -50,7 +50,7 @@ class Datepicker {
             ) show(false);
         });
         
-        // Load
+        // Load (charger)
         t.load = function (n) {
             while (t.frame.firstChild) t.frame.removeChild(t.frame.firstChild);
             
@@ -61,7 +61,7 @@ class Datepicker {
             t.frame.append(t.table);            
             t.table.className = n;
             
-            // If data is month
+            // If data is month (si les données correspondent au mois)
             if (n == "day") {
                 // Prev
                 const prev = document.createElement("li");
@@ -78,7 +78,7 @@ class Datepicker {
                     };
                 } else prev.className = "disabled";
     
-                // month and year
+                // month and year (mois et annee)
                 const head = document.createElement("li");
                 t.head.append(head);
                 head.colSpan = 5;
@@ -88,7 +88,7 @@ class Datepicker {
                 };
                 head.className = "pointer";
     
-                // Next
+                // Next (suivante)
                 const next = document.createElement("li");
                 t.head.append(next);
                 next.innerHTML = ">>";
@@ -103,7 +103,7 @@ class Datepicker {
                     };
                 } else next.className = "disabled";
     
-                // Header row [Weekdays]
+                // Header row [Weekdays] (ligne entete [semaine])
                 const row = document.createElement("tr");
                 t.table.append(row);
                 for (let day = 0; day < 7; day++) {
@@ -154,9 +154,9 @@ class Datepicker {
                 }
             }
             
-            // If data is year
+            // If data is year(si les données correspondent à l'annee)
             else if (n == "month") {
-                // Prev
+                // Prev (precedente)
                 const prev = document.createElement("li");
                 t.head.append(prev);
                 prev.innerHTML = "<<";
@@ -170,12 +170,12 @@ class Datepicker {
                     };
                 } else prev.className = "disabled";
         
-                // Year
+                // Year (annee)
                 const head = document.createElement("li");
                 t.head.append(head);
                 head.innerHTML = t.date.getFullYear();
         
-                // Next
+                // Next (suivante)
                 const next = document.createElement("li");
                 t.head.append(next);
                 next.innerHTML = ">>";
@@ -189,7 +189,7 @@ class Datepicker {
                     };
                 } else next.className = "disabled";
                 
-                // Months
+                // Months (mois)
                 for (let y = 0; y < 3; y++) {
                     const row = document.createElement("tr");
                     t.table.append(row);

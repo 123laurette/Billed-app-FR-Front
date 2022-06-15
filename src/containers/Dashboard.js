@@ -91,7 +91,7 @@ export default class {
 
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
 
-    if (this.counter = this.id) {   //modif pour résolution du bug Hunt Dashboard........this.counter = this.id
+    if (this.counter = this.id) {   //modif pour résolution du bug Hunt Dashboard...ancien code (this.counter % 2 === 0)
       //cela fonctionne, mais cela me casse le test Dashboard
       
       bills.forEach(b => {

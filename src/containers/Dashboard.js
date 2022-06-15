@@ -86,9 +86,14 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
+
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
+
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
-    if (this.counter % 2 === 0) {
+
+    if (this.counter = this.id) {   //modif pour résolution du bug Hunt Dashboard........this.counter = this.id
+      //cela fonctionne, mais cela me casse le test Dashboard
+      
       bills.forEach(b => {
         $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })
       })

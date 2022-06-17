@@ -6,6 +6,8 @@ import { screen } from "@testing-library/dom"
 import DashboardFormUI from "../views/DashboardFormUI.js"
 import { formatDate } from "../app/format.js"
 
+//**************************************test sur la transmission des factures employée vers admin*************************************
+
 const bill = {
   "id": "47qAXb6fIm2zOKkLzMro",
   "vat": "80",
@@ -37,9 +39,9 @@ const billrefused = {
   "status": "refused"
 }
 
-describe('Given I am connected as an Admin and I am on Dashboard Page', () => {
-  describe('When bill data is passed to DashboardUI', () => {
-    test(('Then, it should them in the page'), () => {
+describe('Given I am connected as an Admin and I am on Dashboard Page', () => { //je suis connectée en tant qu'admin et je suis sur la page des factures
+  describe('When bill data is passed to DashboardUI', () => { //lorsque les données de facturation son transmises au tableau de bord
+    test(('Then, it should them in the page'), () => {  //ces informations doivent se mettre dans la page
       const html = DashboardFormUI(bill)
       document.body.innerHTML = html
       expect(screen.getByText(bill.vat)).toBeTruthy()
@@ -52,8 +54,8 @@ describe('Given I am connected as an Admin and I am on Dashboard Page', () => {
       expect(screen.getByText(bill.pct.toString())).toBeTruthy()
     })
   })
-  describe('When pending bill is passed to DashboardUI', () => {
-    test(('Then, it should show button and textArea'), () => {
+  describe('When pending bill is passed to DashboardUI', () => {  //lorsque la facture en attente est transmise au tableau de bord
+    test(('Then, it should show button and textArea'), () => {  //devrait afficher le bouton et la zone de texte
       const html = DashboardFormUI(billPending)
       document.body.innerHTML = html
       expect(screen.getByText("Accepter")).toBeTruthy()
@@ -61,15 +63,15 @@ describe('Given I am connected as an Admin and I am on Dashboard Page', () => {
       expect(screen.getByTestId("commentary2")).toBeTruthy()
     })
   })
-  describe('When accepted bill is passed to DashboardUI', () => {
-    test(('Then, it should show admin commentary'), () => {
+  describe('When accepted bill is passed to DashboardUI', () => { //lorsque la facture acceptée est transmise au tableau de bord
+    test(('Then, it should show admin commentary'), () => { //devrait afficher le commentaire de l'admin
       const html = DashboardFormUI(billAccepted)
       document.body.innerHTML = html
       expect(screen.getByText(bill.commentAdmin)).toBeTruthy()
     })
   })
-  describe('When refused bill is passed to DashboardUI', () => {
-    test(('Then, it should show admin commentary'), () => {
+  describe('When refused bill is passed to DashboardUI', () => {  //lorsque la facture refusée est transmise au tableau de bord
+    test(('Then, it should show admin commentary'), () => { //devrait afficher le commentaire de l'admin
       const html = DashboardFormUI(billrefused)
       document.body.innerHTML = html
       expect(screen.getByText(bill.commentAdmin)).toBeTruthy()

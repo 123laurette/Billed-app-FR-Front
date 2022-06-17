@@ -11,6 +11,7 @@ import {localStorageMock} from "../__mocks__/localStorage.js";//j'importe la con
 
 import router from "../app/Router.js";
 
+// *********************************test sur l'interface employée des anciennes factures*********************************************
 
 //les describe regroupe plusieurs tests (1 sur la surbrillance et l'autre sur l'ordre décroissant)
 describe("Given I am connected as an employee", () => { //je suis connecté en tant qu'employée
@@ -32,12 +33,12 @@ describe("Given I am connected as an employee", () => { //je suis connecté en t
       //to-do write expect expression
 
     })
-    test("Then bills should be ordered from earliest to latest", () => {  //ensuite les notes doivent être en ordre décroissant
-      document.body.innerHTML = BillsUI({ data: bills })  //inserer dans le body au fichier BillsUI les données des Bills
-      const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)
-      const antiChrono = (a, b) => ((a < b) ? 1 : -1)
-      const datesSorted = [...dates].sort(antiChrono) //toutes les dates sont triés par ordre
-      expect(dates).toEqual(datesSorted)  //je m'attends a ce que dates soit égal à datesSorted
-    })
+    test("Then bills should be ordered from earliest to latest", () => {  //ensuite les notes doivent être en ordre croissant
+      document.body.innerHTML = BillsUI({ data: bills })  //afficher les données du fichier views/billsUI
+      const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)//regex de format date
+      const antiChrono = (a, b) => ((a < b) ? 1 : -1) //  ordre croissant
+      const datesSorted = [...dates].sort(antiChrono) //toutes les dates sont triés par date
+      expect(dates).toEqual(datesSorted)  //je m'attends a ce que les données dates soit égal aux données datesSorted
+    })  //la résolution du bug à eu lieu sur le fichier views/billsUI, car c'est le fichier d'affichage des bills(il manquait le trie par ordre croissant)
   })
 })

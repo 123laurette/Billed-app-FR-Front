@@ -40,7 +40,7 @@ export default class Login {
   handleSubmitAdmin = e => {
     e.preventDefault()
     const user = {
-      type: "Admin",
+      type: "Admin",  //suppression bug report login en modifiant les paramètres qui étaient employee au lieu de admin
       email: e.target.querySelector(`input[data-testid="admin-email-input"]`).value,
       password: e.target.querySelector(`input[data-testid="admin-password-input"]`).value,
       status: "connected"

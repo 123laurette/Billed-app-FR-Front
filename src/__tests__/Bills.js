@@ -3,6 +3,7 @@
  */
 //NOTA : import avec accolades(pour un endroit particulier du fichier)
 //import sans accolade(le fichier en totalité)
+import "@testing-library/jest-dom"
 import {screen, waitFor} from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js" //contient la créa dom de la note de frais
 import { bills } from "../fixtures/bills.js"  //contient les données du test
@@ -30,6 +31,7 @@ describe("Given I am connected as an employee", () => { //je suis connecté en t
       window.onNavigate(ROUTES_PATH.Bills)
       await waitFor(() => screen.getByTestId('icon-window'))
       const windowIcon = screen.getByTestId('icon-window')
+      expect(windowIcon).toHaveClass("active-icon")
       //to-do write expect expression
 
     })

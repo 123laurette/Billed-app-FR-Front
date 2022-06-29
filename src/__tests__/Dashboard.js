@@ -34,7 +34,7 @@ describe('Given I am connected as an Admin', () => {//je suis connectée en tant
   describe('When I am on Dashboard page, there are bills, and there is two refused', () => {  //je suis sur le tableau de bord, il y a des factures et il y en a deux refusée
     test('Then, filteredBills by accepted status should return 2 bills', () => {  //les factures filtrées par statut acceptée devraient renvoyer deux facture
 
-      //*******POURQUOI PARLER DU FILTRE ACCEPTE DANS LE TES SUR LES FACTURES REFUSEES */
+      //*******POURQUOI PARLER DU FILTRE ACCEPTE DANS LE TESTE SUR LES FACTURES REFUSEES */
 
       const filtered_bills = filteredBills(bills, "refused")
       expect(filtered_bills.length).toBe(2)

@@ -6,6 +6,7 @@ import { screen } from "@testing-library/dom"
 import Actions from "../views/Actions.js"
 import '@testing-library/jest-dom/extend-expect'
 
+//TEST SUR L'OUVERTURE DU JUSTIF AU CLIC SUR L'OEIL
 
 describe('Given I am connected as an Employee', () => { //je suis connectée en tant qu'employée
   describe('When I am on Bills page and there are bills', () => { //je suis sur la page des factures et il y a des factures

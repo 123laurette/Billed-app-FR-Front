@@ -4,6 +4,7 @@
 import "@testing-library/jest-dom"
 import { screen } from "@testing-library/dom"
 import NewBillUI from "../views/NewBillUI.js"
+import Bills from "../containers/Bills.js" //endroit ou se trouve evt sur btn_new-bill
 import NewBill from "../containers/NewBill.js"
 
 //******************************************************** */
@@ -13,6 +14,15 @@ import NewBill from "../containers/NewBill.js"
 describe("Given I am connected as an employee", () => {
   describe("je clique sur le bouton nouvelle note de frais", () => {
     test("un formulaire de saisie apparait", () => {
+      const html = NewBillUI()
+      document.body.innerHTML = html
+      
+      const btnNewBill = screen.getByTestId("btn-new-bill");  //cible le btn
+      const newBill = screen.getByTestId("root"); //cible la NewBill
+      const ouvreNewBill = jest.fn((e) => e.display = Block); //simule le click et le display block
+      btnNewBill.addEventListener("click", ouvreNewBill);// evt au click sur le btn
+      expect(ouvreNewBill).toBe(newBill); //la simulation doit donner la newbill
+
 
     })
   })

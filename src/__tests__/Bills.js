@@ -32,7 +32,6 @@ describe("Given I am connected as an employee", () => { //je suis connecté en t
       await waitFor(() => screen.getByTestId('icon-window'))
       const windowIcon = screen.getByTestId('icon-window')
       expect(windowIcon).toHaveClass("active-icon")
-      //to-do write expect expression
 
     })
     test("Then bills should be ordered from earliest to latest", () => {  //ensuite les notes doivent être en ordre croissant

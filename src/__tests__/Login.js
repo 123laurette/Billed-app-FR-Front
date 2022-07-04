@@ -136,7 +136,7 @@ describe("Given that I am a user on login page", () => {  //etant donné que je 
 
 describe("Given that I am a user on login page", () => {  //etant donné que je suis un utilisateur sur la page de connexion
   describe("When I do not fill fields and I click on admin button Login In", () => {//je ne remplis pas les champs et je clique sur le bouton admin "se connecter"
-    test("Then It should renders Login page", () => { //devrait rester sur la page de connextion
+    test("Then It should renders Login page", () => { //devrait rester sur la page de connexion
       document.body.innerHTML = LoginUI();
 
       const inputEmailUser = screen.getByTestId("admin-email-input");

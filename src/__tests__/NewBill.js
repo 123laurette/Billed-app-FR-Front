@@ -40,7 +40,7 @@ describe("Given I am connected as an employee", () => {
       expect(Justif.value).toBe("")
 
 
-      //la note de frais reste à l'écran
+      //la note de frais reste à l'écran (pour mémo le data testId btn send bill a été ajouté par moi dans view)
       const btnGetNewBill = screen.getByTestId("btn-send-bill")//cible le bouton envoyé de la note de frais
       const envoiNewBill = jest.fn((e) => e.preventDefault())//creat de fonction 
       btnGetNewBill.addEventListener("submit", envoiNewBill)//ecoute d'évènement

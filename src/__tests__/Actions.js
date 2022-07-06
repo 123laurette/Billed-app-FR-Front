@@ -17,7 +17,7 @@ describe('Given I am connected as an Employee', () => { //je suis connectée en 
     })
   })
   describe('When I am on Bills page and there are bills with url for file', () => { //je suis sur la page des factures et il y a des factures avec l'URL du fichier
-    test(('Then, it should save given url in data-bill-url custom attribute'), () => {  //doit enregistrer l'URL donnée dans l'attribut personnalisé data-bill-url
+    test(('Then, it should save given url in data-bill-url custom attribute'), () => {  //devrait me retourner le detail du justificatif
       const url = '/fake_url'
       const html = Actions(url)
       document.body.innerHTML = html

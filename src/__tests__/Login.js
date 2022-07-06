@@ -40,7 +40,6 @@ describe("Given that I am a user on login page", () => {  //etant donné que je 
       fireEvent.submit(form); //simulation evenement
       expect(screen.getByTestId("form-employee")).toBeTruthy();
       //toBeTruthy = la valeur n'a pas d'importance, mais cela vérifie le vrai
-      //POURQUOI NE PAS AVOIR MIS LA CONST form, au lieu de screen.....
     });
   });
 

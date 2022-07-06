@@ -96,7 +96,7 @@ describe('Given I am connected as an Admin', () => {//je suis connectée en tant
   })
 
   describe('When I am on Dashboard page and I click on edit icon of a card', () => {  //je suis sur le tableau de bord et je click sur une des factures
-    test('Then, right form should be filled',  () => {  //le bon formulaire doit être rempli (????bizarre)
+    test('Then, right form should be filled',  () => {  //le bon formulaire doit apparaitre
 
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
@@ -124,7 +124,7 @@ describe('Given I am connected as an Admin', () => {//je suis connectée en tant
   })
 
   describe('When I am on Dashboard page and I click 2 times on edit icon of a card', () => {  //je suis sur le tableau de bord et je clique 2 fois sur la facture(dans ce cas, la détail de la facture apparait et disparait, du fait que cela referme la facture) 
-    test('Then, big bill Icon should Appear',  () => {  //???? bizarre
+    test('Then, big bill Icon should Appear',  () => {  
 
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })

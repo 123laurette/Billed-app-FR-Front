@@ -5,8 +5,7 @@ import "@testing-library/jest-dom"
 import { fireEvent, screen } from "@testing-library/dom"
 import NewBillUI from "../views/NewBillUI.js"
 import BillsUI from "../views/BillsUI.js" //endroit ou se trouve sur btn_new-bill
-import NewBill from "../containers/NewBill.js"
-import { ROUTES_PATH} from "../constants/routes.js";//j'importe la const routes_path
+
 import {localStorageMock} from "../__mocks__/localStorage.js";//j'importe la const localstoragemock
 
 //******************************************************** */
@@ -14,33 +13,47 @@ import {localStorageMock} from "../__mocks__/localStorage.js";//j'importe la con
 //********************************************************* */
 
 describe("Given I am connected as an employee", () => {
-  describe("je suis sur une nouvelle facture et je ne rempli pas le champ TTC", () => {
-    test ("un message apparait", () => {
+  describe("je suis sur une nouvelle facture et je ne rempli pas les champs date, TTC et fichier joint", () => {
+    test ("la note de frais reste à l'écran et un message apparait", () => {
 
+      //je suis connecté en tant qu'employée
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
       }))
       
+  //*******************EXEMLE SUIVI, test/Login.js ligne 15************
+
+      //je suis sur une nouvelle note de frais
       const html = NewBillUI          //crea const qui represente le formulaire
       document.body.innerHTML = html
-      const ttc = screen.getByTestId("amount");
-      expect(ttc.value).toEqual("");
-      document.body.innerHTML = html({ error : "veuillez remplir ce champ"})      
+
+
+      //je ne remplis pas les champs date, ttc et fichier joint
+      const date = screen.getByTestId("datepicker"); //Champ de la date
+      expect(date.value).toBe("");
+
+      const ttc = screen.getByTestId("amount"); //Champ du TTC
+      expect(ttc.value).toBe(""); 
+
+      const Justif = screen.getByTestId("file") //Champ du fichier
+      expect(Justif.value).toBe("")
+
+
+      //la note de frais reste à l'écran
+      const btnGetNewBill = screen.getByTestId("btn-send-bill")//cible le bouton envoyé de la note de frais
+      const envoiNewBill = jest.fn((e) => e.preventDefault())//creat de fonction 
+      btnGetNewBill.addEventListener("submit", envoiNewBill)//ecoute d'évènement
+      fireEvent.submit(btnGetNewBill)//simulation de l'évènement
+      expect(screen.getByTestId("btn-send-bill")).toBeTruthy()
+      
     })
   })
-
-
-
 
 
   describe("quand je clique sur le bouton nouvelle note de frais", () => {
     test("Alors un formulaire de saisie apparait", () => {
 
-      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-      window.localStorage.setItem('user', JSON.stringify({
-        type: 'Employee'
-      }))
       const html = NewBillUI          //crea const qui represente le formulaire
       document.body.innerHTML = html
       const btn = BillsUI             //crea const qui represente l'endroit du btn
@@ -53,7 +66,7 @@ describe("Given I am connected as an employee", () => {
 
       btnNewBill.addEventListener("click", ouvreNewBill);// evt au click sur le btn et prise en compte de la fonction
 
-      expect(html).toEqual(html); //la simulation doit donner la newbill
+      expect().toBe(); //la simulation doit donner la newbill
     })
   })
 
@@ -88,29 +101,12 @@ describe("Given I am connected as an employee", () => {
     })
   })
   
-  describe("je suis sur une nouvelle facture et je ne choisi pas de date", () => {
-    test ("un message apparait", () => {
-      const html = NewBillUI          //crea const qui represente le formulaire
-      document.body.innerHTML = html
-      const calendrier = screen.getByTestId ("datepicker");
-      expect(calendrier.value).toBe("");
-      document.body.innerHTML = NewBillUI({ error : "veuillez remplir ce champ"});
-
-    })
-  })
+  
+})
 
   
 
-  describe("je suis sur une nouvelle facture et je rempli le champ TTC avec une virgule", () => {
-    test ("un message apparait", () => {
-
-    })
-  })
-
-
-
-})
-
+ 
 
 
 

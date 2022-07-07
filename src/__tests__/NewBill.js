@@ -7,6 +7,7 @@ import NewBillUI from "../views/NewBillUI.js"
 import BillsUI from "../views/BillsUI.js" //endroit ou se trouve sur btn_new-bill
 
 import {localStorageMock} from "../__mocks__/localStorage.js";//j'importe la const localstoragemock
+import NewBill from "../containers/NewBill.js";
 
 //******************************************************** */
 //                CONTINUER LE CODE 
@@ -101,8 +102,19 @@ describe("Given I am connected as an employee", () => {
     })
   })
   
-  
+  describe("je clique sur choisir un fichier et je telecharge le fichier dans le bon format", () => {
+    test ("mon champ est validé", () => {
+      document.body.innerHTML = NewBillUI({data: NewBill})
+      const formatAutorise = ( "image/jpg", "image/png","image/jpeg")
+      const file = screen.getByTestId("file")
+      var controlFormat = formatAutorise.includes(file.type)
+      expect(file).toEqual(controlFormat)
+    } )
+  })
+
+
 })
+
 
   
 

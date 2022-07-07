@@ -81,7 +81,7 @@ describe("Given I am connected as an employee", () => {
       const openListe = jest.fn((e) => e.style.display = block);
       fireEvent.click(depense);
       depense.addEventListener("click", openListe);
-      expect(depense).toBeTruthy();
+      expect(screen.getByTestId("expense-type")).toBeTruthy();
 
     })
   })
@@ -97,7 +97,7 @@ describe("Given I am connected as an employee", () => {
       const openCalendrier = jest.fn((e) => e.style.display = block);
       fireEvent.click(calendrier);
       calendrier.addEventListener("click", openCalendrier);
-      expect(calendrier).toBeTruthy();
+      expect(screen.getByTestId ("datepicker")).toBeTruthy();
     })
   })
   

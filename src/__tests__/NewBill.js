@@ -3,14 +3,12 @@
  */
 import "@testing-library/jest-dom"
 import { fireEvent, screen } from "@testing-library/dom"
-import userEvent from '@testing-library/user-event'
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
-import Bills from "../containers/Bills.js"
 import BillsUI from "../views/BillsUI.js" //endroit ou se trouve sur btn_new-bill
 import {localStorageMock} from "../__mocks__/localStorage.js";//j'importe la const localstoragemock
 import { ROUTES } from '../constants/routes'
-import mockStore from '../__mocks__/store'
+window.alert = jest.fn()
 
 
 
@@ -71,7 +69,7 @@ describe("Given I am connected as an employee", () => {
 
 
   
-  describe("je clique sur choisir un fichier et je telecharge le fichier dans le bon format", () => {
+  describe("je clique sur choisir un fichier et je telecharge le fichier dans le format jpg", () => {
     test ("mon champ est validé", () => {
        //je suis connecté en tant qu'employée
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
@@ -103,4 +101,36 @@ describe("Given I am connected as an employee", () => {
       expect(fichier.files[0]).toStrictEqual(testFormat)
     })
   })
+  describe("je clique sur choisir un fichier et je telecharge le fichier dans un mauvais format", () => {
+    test ("je reste sur mon formulaire et un message apparait", () => {
+       //je suis connecté en tant qu'employée
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+      type: 'Employee'
+      }))
+    
+       //je suis sur une nouvelle note de frais
+      const html = NewBillUI()          //crea const qui represente le formulaire
+      document.body.innerHTML = html
+      const onNavigate = (pathname) => {  //je charge le fichier route
+      document.body.innerHTML = ROUTES({ pathname})
+      }
+       const newBill = new NewBill({ //je crée une nouvelle instance newbill
+        document,
+        onNavigate,
+        store: null,
+        localStorage: window, localStorage,
+      })
+      const chargeFichier = jest.fn(newBill => newBill)
+      const fichier = screen.getByTestId("file")
+      const testFormat = new File(["c'est un test"], {
+      type: "document.txt"
+      })
+      fichier.addEventListener("change", chargeFichier)
+      fireEvent.change(fichier, {target: {files: [testFormat]}})
+      
+      expect(chargeFichier).toHaveBeenCalled()
+      expect(window.alert).toBeTruthy()
+    })
+})
 })

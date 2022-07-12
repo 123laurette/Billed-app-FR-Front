@@ -3,15 +3,16 @@
  */
 import "@testing-library/jest-dom"
 import { fireEvent, screen } from "@testing-library/dom"
+import userEvent from '@testing-library/user-event'
 import NewBillUI from "../views/NewBillUI.js"
+import NewBill from "../containers/NewBill.js"
+import Bills from "../containers/Bills.js"
 import BillsUI from "../views/BillsUI.js" //endroit ou se trouve sur btn_new-bill
-
 import {localStorageMock} from "../__mocks__/localStorage.js";//j'importe la const localstoragemock
-import NewBill from "../containers/NewBill.js";
+import { ROUTES } from '../constants/routes'
+import mockStore from '../__mocks__/store'
 
-//******************************************************** */
-//                CONTINUER LE CODE 
-//********************************************************* */
+
 
 describe("Given I am connected as an employee", () => {
   describe("je suis sur une nouvelle facture et les champs date, TTC et fichier joint sont vides", () => {
@@ -90,14 +91,15 @@ describe("Given I am connected as an employee", () => {
         store: null,
         localStorage: window, localStorage,
       })
-      const chargeFichier = jest.fn((e) => newBill.chargeFichier(e))
+      const chargeFichier = jest.fn(newBill => newBill)
       const fichier = screen.getByTestId("file")
-      const testFormat = new File(["this is a test"], "test.jpg", {
-        type: "image/jpg"
+      const testFormat = new File(["c'est un test"], {
+        accept: "image/jpg"
       })
       fichier.addEventListener("change", chargeFichier)
       fireEvent.change(fichier, {target: {files: [testFormat]}})
       
+      expect(chargeFichier).toHaveBeenCalled()
       expect(fichier.files[0]).toStrictEqual(testFormat)
     })
   })

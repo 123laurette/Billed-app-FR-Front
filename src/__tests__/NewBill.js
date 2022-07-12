@@ -14,8 +14,8 @@ import NewBill from "../containers/NewBill.js";
 //********************************************************* */
 
 describe("Given I am connected as an employee", () => {
-  describe("je suis sur une nouvelle facture et je ne rempli pas les champs date, TTC et fichier joint", () => {
-    test ("la note de frais reste à l'écran et un message apparait", () => {
+  describe("je suis sur une nouvelle facture et les champs date, TTC et fichier joint sont vides", () => {
+    test ("la note de frais reste à l'écran", () => {
 
       //je suis connecté en tant qu'employée
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
@@ -23,13 +23,10 @@ describe("Given I am connected as an employee", () => {
         type: 'Employee'
       }))
       
-  //*******************EXEMLE SUIVI, test/Login.js ligne 15************
-
       //je suis sur une nouvelle note de frais
-      const html = NewBillUI          //crea const qui represente le formulaire
+      const html = NewBillUI()          //crea const qui represente le formulaire
       document.body.innerHTML = html
-
-
+      
       //je ne remplis pas les champs date, ttc et fichier joint
       const date = screen.getByTestId("datepicker"); //Champ de la date
       expect(date.value).toBe("");
@@ -37,16 +34,16 @@ describe("Given I am connected as an employee", () => {
       const ttc = screen.getByTestId("amount"); //Champ du TTC
       expect(ttc.value).toBe(""); 
 
-      const Justif = screen.getByTestId("file") //Champ du fichier
-      expect(Justif.value).toBe("")
+      const fichier = screen.getByTestId("file") //Champ du fichier
+      expect(fichier.value).toBe("")
 
-
-      //la note de frais reste à l'écran (pour mémo le data testId btn send bill a été ajouté par moi dans view)
-      const btnGetNewBill = screen.getByTestId("btn-send-bill")//cible le bouton envoyé de la note de frais
-      const envoiNewBill = jest.fn((e) => e.preventDefault())//creat de fonction 
-      btnGetNewBill.addEventListener("submit", envoiNewBill)//ecoute d'évènement
-      fireEvent.submit(btnGetNewBill)//simulation de l'évènement
-      expect(screen.getByTestId("btn-send-bill")).toBeTruthy()
+      const formNewBill = screen.getByTestId("form-new-bill")//je cible le formulaire de la nouvelle note de frais
+      expect(formNewBill).toBeTruthy()//le formulaire vide apparait correctement
+      
+      const envoiNewBill = jest.fn((e) => e.preventDefault())//creat de fonction pour stopper l'action par défaut
+      formNewBill.addEventListener("submit", envoiNewBill)//ecoute d'évènement
+      fireEvent.submit(formNewBill)//simulation de l'évènement
+      expect(screen.getByTestId("form-new-bill")).toBeTruthy()//après l'évènement le formulaire reste à l'écran
       
     })
   })
@@ -67,59 +64,41 @@ describe("Given I am connected as an employee", () => {
 
       btnNewBill.addEventListener("click", ouvreNewBill);// evt au click sur le btn et prise en compte de la fonction
 
-      expect().toBe(); //la simulation doit donner la newbill
+      expect(html).toBeTruthy(); //la simulation doit donner la newbill
     })
   })
 
 
-  describe("quand je suis sur une nouvelle facture et que je clique sur type de dépense", () => { 
-    test("Alors une liste déroulante s'ouvre", () => {
-
-      const html = NewBillUI          //crea const qui represente le formulaire
-      document.body.innerHTML = html
-
-      const depense = screen.getByTestId("expense-type");
-      const openListe = jest.fn((e) => e.style.display = block);
-      fireEvent.click(depense);
-      depense.addEventListener("click", openListe);
-      expect(screen.getByTestId("expense-type")).toBeTruthy();
-
-    })
-  })
-
-
-  describe("je suis sur une nouvelle facture et je clique sur le calendrier", () => {
-    test ("je choisis une date", () => {
-
-      const html = NewBillUI          //crea const qui represente le formulaire
-      document.body.innerHTML = html
-
-      const calendrier = screen.getByTestId ("datepicker");
-      const openCalendrier = jest.fn((e) => e.style.display = block);
-      fireEvent.click(calendrier);
-      calendrier.addEventListener("click", openCalendrier);
-      expect(screen.getByTestId ("datepicker")).toBeTruthy();
-    })
-  })
   
   describe("je clique sur choisir un fichier et je telecharge le fichier dans le bon format", () => {
     test ("mon champ est validé", () => {
-      document.body.innerHTML = NewBillUI({data: NewBill})
-      const formatAutorise = ( "image/jpg", "image/png","image/jpeg")
-      const file = screen.getByTestId("file")
-      var controlFormat = formatAutorise.includes(file.type)
-      expect(file).toEqual(controlFormat)
-    } )
+       //je suis connecté en tant qu'employée
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+      type: 'Employee'
+      }))
+    
+       //je suis sur une nouvelle note de frais
+      const html = NewBillUI()          //crea const qui represente le formulaire
+      document.body.innerHTML = html
+      const onNavigate = (pathname) => {  //je charge le fichier route
+      document.body.innerHTML = ROUTES({ pathname})
+      }
+       const newBill = new NewBill({ //je crée une nouvelle instance newbill
+        document,
+        onNavigate,
+        store: null,
+        localStorage: window, localStorage,
+      })
+      const chargeFichier = jest.fn((e) => newBill.chargeFichier(e))
+      const fichier = screen.getByTestId("file")
+      const testFormat = new File(["this is a test"], "test.jpg", {
+        type: "image/jpg"
+      })
+      fichier.addEventListener("change", chargeFichier)
+      fireEvent.change(fichier, {target: {files: [testFormat]}})
+      
+      expect(fichier.files[0]).toStrictEqual(testFormat)
+    })
   })
-
-
 })
-
-
-  
-
- 
-
-
-
-

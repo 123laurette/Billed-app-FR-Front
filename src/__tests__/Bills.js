@@ -4,14 +4,15 @@
 //NOTA : import avec accolades(pour un endroit particulier du fichier)
 //import sans accolade(le fichier en totalité)
 import "@testing-library/jest-dom"
-import {screen, waitFor} from "@testing-library/dom"
-import BillsUI from "../views/BillsUI.js" //contient la créa dom de la note de frais
-import { bills } from "../fixtures/bills.js"  //contient les données du test
-import Bills from "../containers/Bills.js"
+ import {fireEvent, screen, waitFor} from "@testing-library/dom"
+ import BillsUI from "../views/BillsUI.js" //contient la créa dom de la note de frais
+ import Bills from "../containers/Bills.js";
+ import { bills } from "../fixtures/bills.js"  //contient les données du test
 
-import { ROUTES, ROUTES_PATH} from "../constants/routes.js";//j'importe la const routes_path
-import {localStorageMock} from "../__mocks__/localStorage.js";//j'importe la const localstoragemock
+ import { ROUTES, ROUTES_PATH} from "../constants/routes.js";//j'importe la const routes_path
+ import {localStorageMock} from "../__mocks__/localStorage.js";//j'importe la const localstoragemock
 import mockStore from "../__mocks__/store"
+ import userEvent from "@testing-library/user-event";
 
 import router from "../app/Router.js";
 jest.mock("../app/Store", () => mockStore)
@@ -48,67 +49,61 @@ describe("Given I am connected as an employee", () => { //je suis connecté en t
     })  //la résolution du bug à eu lieu sur le fichier views/billsUI, car c'est le fichier d'affichage des bills(il manquait le trie par ordre croissant)
   })
 
+  describe("je clique sur le bouton 'Nouvelle note de frais'", () => {//je clique sur le bouton nouvelle note de frais
+    test("une nouvelle note de frais apparait", () => { // Vérifie qu'on arrive bien sur la page NewBill
 
-
-
-  /*describe("When I click on the button 'Nouvelle note de frais'", () => {
-    test("Then I should navigate to #employee/bill/new", () => {
-      // Vérifie qu'on arrive bien sur la page NewBill
-      const onNavigate = (pathname) => {
-        document.body.innerHTML = ROUTES({ pathname })
-      }
+      //je suis connecté en tant qu'employée
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
       }))
-      const billsPage = new Bills({
-        document, onNavigate, store: null, bills: bills, localStorage: window.localStorage
+      //J'intègre le chemin d'accès
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      const billsPage = new Bills({//créa instance de bill
+        document,
+        onNavigate,
+        store: null,
+        bills: bills,
+        localStorage: window.localStorage
       })
-      // on récupère la fonction pour le test
-      const handleClickNewBill = jest.fn(billsPage.handleClickNewBill);
-      // on récupère l'accès au bouton qui dirige vers la page souhaitée
-      const btnNewBill = getByTestId(document.body, "btn-new-bill");
-      // on simule l'action
-      btnNewBill.addEventListener("click", handleClickNewBill);
-      userEvent.click(btnNewBill);
+      //créa const pour fonction qui appel la fonction a tester
+      const OuvertureNewBill = jest.fn(billsPage.handleClickNewBill);
+      const btnNewBill = screen.getByTestId("btn-new-bill")//cible le btn nouvelle note de frais
+      btnNewBill.addEventListener("click", OuvertureNewBill)//écoute évènement
+      fireEvent.click(btnNewBill)//simule évènement au click
       // on vérifie que la fonction est appelée et que la page souhaitée s'affiche
-      expect(handleClickNewBill).toHaveBeenCalled();
-      expect(
-        getByText(document.body, "Envoyer une note de frais")
-      ).toBeTruthy();
-    });
-  });
+      expect(OuvertureNewBill).toHaveBeenCalled()//je m'attends à ce que la page nouvelle note de frais se charge
+      expect(screen.getByText("Envoyer une note de frais")).toBeTruthy()//la nouvelle note de frais apparait avec entête envoyer une note de frais
+    })
+  })
 
-  describe("When I click on the eye icon", () => {
-    test("A modal should open", () => {
-      // Vérifie l'ouverture de la modale si click sur le bouton "oeil" d'une facture
-      const onNavigate = (pathname) => {
-        document.body.innerHTML = ROUTES({ pathname })
-      }
-      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+  describe("je suis sur la page des facture et je clique sur l'icone oeil", () => {
+    test("le justificatif qui a été chargé apparait", () => {
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock})
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
       }))
-      const billsPage = new Bills({
-        document, onNavigate, store: null, bills: bills, localStorage: window.localStorage
+
+      const html = BillsUI({ data: bills })
+      $.fn.modal = jest.fn()
+      document.body.innerHTML = html
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      const store = null
+      const billsView = new Bills({
+        document,
+        onNavigate,
+        store,
+        localStorage: window.localStorage,
       })
-      // on affiche les factures dans le HTML
-      document.body.innerHTML = BillsUI({ data: { bills } })
-      // on mock la modale
-      $.fn.modal = jest.fn();
-      // on récupère le premier bouton trouvé
-      const firstEyeIcon = getAllByTestId(document.body, "btn-new-bill")[0];
-      // on récupère la fonction qui ouvre la modale
-      const handleClickIconEye = jest.fn(
-        billsPage.handleClickIconEye(firstEyeIcon)
-      );
-      // on simule l'action
-      firstEyeIcon.addEventListener("click", handleClickIconEye);
-      userEvent.click(firstEyeIcon);
-      // on vérifie l'appel de la fonction et la présence de la modale
-      expect(handleClickIconEye).toHaveBeenCalled();
-      const modal = screen.getByTestId("modale");
-      expect(modal).toBeTruthy();
+      const iconeOeil = screen.getAllByTestId('icon-eye')[0]
+      const clickIconeOeil = jest.fn(billsView.handleClickIconEye)
+      iconeOeil.addEventListener('click', clickIconeOeil(iconeOeil))
+      fireEvent.click(iconeOeil)
+      expect(screen.getByText("Justificatif")).toBeTruthy()
     })
-  })*/  
-})
+  })
+})  

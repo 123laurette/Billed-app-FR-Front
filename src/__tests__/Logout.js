@@ -29,7 +29,7 @@ const bills = [{
 
 // ******************************************Test sur le bouton de déconnexion***************************
 
-describe('Given I am connected', () => {  //je suis connectée
+describe('Given I am connected', () => {  //je suis connectée en tant qu'admin
   describe('When I click on disconnect button', () => { //quand je clique sur le bouton déconnecté
     test(('Then, I should be sent to login page'), () => {  //devrais être envoyé vers la page de connexion
       const onNavigate = (pathname) => {
@@ -39,22 +39,44 @@ describe('Given I am connected', () => {  //je suis connectée
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Admin'
       }))
-      /*Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-      window.localStorage.setItem('user', JSON.stringify({
-        type: 'Employee'
-      }))*/
+      
       document.body.innerHTML = DashboardUI({ bills })
       const logout = new Logout({ document, onNavigate, localStorage })
       const handleClick = jest.fn(logout.handleClick)
 
       const disco = screen.getByTestId('layout-disconnect')
-      //const disco = screen.getAllByTestId('layout-disconnect')
       
       disco.addEventListener('click', handleClick)
       userEvent.click(disco)
       expect(handleClick).toHaveBeenCalled()
       expect(screen.getByText('Administration')).toBeTruthy()
-      //expect(screen.getByText('Employé')).toBeTruthy()
+
+    })
+  })
+})
+// test qui ne change rien au pourcentage, est il vraiment nécessaire ?
+
+describe('Given I am connected', () => {  //je suis connectée en tant qu'employee
+  describe('When I click on disconnect button', () => { //quand je clique sur le bouton déconnecté
+    test(('Then, I should be sent to login page'), () => {  //devrais être envoyé vers la page de connexion
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+      document.body.innerHTML = DashboardUI({ bills })
+      const logout = new Logout({ document, onNavigate, localStorage })
+      const handleClick = jest.fn(logout.handleClick)
+
+      const disco = screen.getByTestId('layout-disconnect')
+      
+      disco.addEventListener('click', handleClick)
+      userEvent.click(disco)
+      expect(handleClick).toHaveBeenCalled()
+      expect(screen.getByText('Employé')).toBeTruthy()
 
     })
   })

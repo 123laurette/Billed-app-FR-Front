@@ -43,7 +43,7 @@ describe("Given that I am a user on login page", () => {  //etant donné que je 
     });
   });
 
-  describe("When I do fill fields in incorrect format and I click on employee button Login In", () => { //je remplis les champs dans un format incorect et je clique sur le bouton "se connecter"
+  describe("When I do fill fields in incorrect format and I click on employee button Login In", () => { //je remplis les champs dans un format incorect et je clique sur le bouton "se connecte" du formulaire employé
     test("Then It should renders Login page", () => { //devrait rester sur la page de connexion
       document.body.innerHTML = LoginUI();
 

@@ -14,34 +14,21 @@ describe("Given that I am a user on login page", () => {  //etant donné que je 
   describe("When I do not fill fields and I click on employee button Login In", () => { //je ne remplis pas les champs et je clique sur le bouton employée "se connecter"
     test("Then It should renders Login page", () => { //devrait rester sur la page de connexion
       document.body.innerHTML = LoginUI();
-        //(insertion de la base html du fichier views/loginUi)
-
       const inputEmailUser = screen.getByTestId("employee-email-input");
-        //créa constante qui filtre par test Id
       expect(inputEmailUser.value).toBe("");
-        //si la constante créé est = à rien du tout
 
       const inputPasswordUser = screen.getByTestId("employee-password-input");
-        //créa constante qui filtre par test Id
-
       expect(inputPasswordUser.value).toBe("");
-        //si la constante créé est = à rien du tout
-
 
       const form = screen.getByTestId("form-employee");
-        //créa constante qui filtre par test Id
 
       const handleSubmit = jest.fn((e) => e.preventDefault());
-        //simulation de fonction (jest.fn)
-        //stop l'action par défaut
 
       form.addEventListener("submit", handleSubmit);
-      //à la soumition du login, application de la constante, qui stop l'action
-      fireEvent.submit(form); //simulation evenement
+      fireEvent.submit(form); 
       expect(screen.getByTestId("form-employee")).toBeTruthy();
-      //toBeTruthy = la valeur n'a pas d'importance, mais cela vérifie le vrai
-    });
-  });
+    })
+  })
 
   describe("When I do fill fields in incorrect format and I click on employee button Login In", () => { //je remplis les champs dans un format incorect et je clique sur le bouton "se connecte" du formulaire employé
     test("Then It should renders Login page", () => { //devrait rester sur la page de connexion

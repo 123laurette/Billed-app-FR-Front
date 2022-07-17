@@ -91,8 +91,7 @@ export default class {
 
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
 
-    if (this.counter % 2 === 0) {   //modif pour résolution du bug Hunt Dashboard...nouveau code (this.counter = this.id)
-            //cela fonctionne, mais cela me casse le test Dashboard et en plus cela fait une erreur quand on valide une note de frais
+    if (this.counter % 2 === 0) {   
       
       bills.forEach(b => {
         $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })
@@ -150,7 +149,7 @@ export default class {
       this.counter ++
     }
 
-    bills.forEach(bill => { //resolution bug hunt dashboard(suppression de l'historique des clicks)
+    bills.forEach(bill => { //resolution bug hunt dashboard(suppression de l'historique des clicks)...off(click)
       $(`#open-bill${bill.id}`).off("click").on("click",((e) => this.handleEditTicket(e, bill, bills)))
     })
 

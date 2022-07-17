@@ -261,6 +261,7 @@ describe("Given I am a user connected as Admin", () => {  //je suis un utilisate
       expect(contentRefused).toBeTruthy()
       expect(screen.getByTestId("big-billed-icon")).toBeTruthy()
     })
+  })
   describe("When an error occurs on API", () => { //lorsque une erreur se produit sur l'api
     beforeEach(() => {
       jest.spyOn(mockStore, "bills")
@@ -288,7 +289,7 @@ describe("Given I am a user connected as Admin", () => {  //je suis un utilisate
         }})
       window.onNavigate(ROUTES_PATH.Dashboard)
       await new Promise(process.nextTick);
-      const message = await screen.getByText(/Erreur 404/)
+      const message =  screen.getByText(/Erreur 404/)
       expect(message).toBeTruthy()
     })
 
@@ -299,15 +300,14 @@ describe("Given I am a user connected as Admin", () => {  //je suis un utilisate
           list : () =>  {
             return Promise.reject(new Error("Erreur 500"))
           }
-        }})
+        }
+      })
 
       window.onNavigate(ROUTES_PATH.Dashboard)
       await new Promise(process.nextTick);
-      const message = await screen.getByText(/Erreur 500/)
+      const message =  screen.getByText(/Erreur 500/)
       expect(message).toBeTruthy()
     })
-  })
-
   })
 })
 

@@ -5,15 +5,15 @@ export let PREVIOUS_LOCATION = ''
 // we use a class so as to test its methods in e2e tests
 export default class Login {
   constructor({ document, localStorage, onNavigate, PREVIOUS_LOCATION, store }) {
-    this.document = document
-    this.localStorage = localStorage
-    this.onNavigate = onNavigate
-    this.PREVIOUS_LOCATION = PREVIOUS_LOCATION
-    this.store = store
-    const formEmployee = this.document.querySelector(`form[data-testid="form-employee"]`)
-    formEmployee.addEventListener("submit", this.handleSubmitEmployee)
-    const formAdmin = this.document.querySelector(`form[data-testid="form-admin"]`)
-    formAdmin.addEventListener("submit", this.handleSubmitAdmin)
+    this.document = document;
+    this.localStorage = localStorage;
+    this.onNavigate = onNavigate;
+    this.PREVIOUS_LOCATION = PREVIOUS_LOCATION;
+    this.store = store;
+    const formEmployee = this.document.querySelector(`form[data-testid="form-employee"]`);
+    formEmployee.addEventListener("submit", this.handleSubmitEmployee);
+    const formAdmin = this.document.querySelector(`form[data-testid="form-admin"]`);
+    formAdmin.addEventListener("submit", this.handleSubmitAdmin);
   }
   handleSubmitEmployee = e => {
     e.preventDefault()
@@ -34,13 +34,13 @@ export default class Login {
         PREVIOUS_LOCATION = this.PREVIOUS_LOCATION
         this.document.body.style.backgroundColor="#fff"
       })
-
   }
 
   handleSubmitAdmin = e => {
+    console.log("object");
     e.preventDefault()
     const user = {
-      type: "Admin",  //suppression bug report login en modifiant les paramètres qui étaient employee au lieu de admin
+      type: "Admin",
       email: e.target.querySelector(`input[data-testid="admin-email-input"]`).value,
       password: e.target.querySelector(`input[data-testid="admin-password-input"]`).value,
       status: "connected"

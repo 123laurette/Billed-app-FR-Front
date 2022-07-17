@@ -7,7 +7,10 @@ import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
 import {localStorageMock} from "../__mocks__/localStorage.js";
 import { ROUTES } from '../constants/routes'
+import mockStore from "../__mocks__/store.js"
+
 window.alert = jest.fn()
+jest.mock("../app/Store", () => mockStore)
 
 
 
@@ -48,7 +51,7 @@ describe("Given I am connected as an employee", () => {
   })
 
   describe("je telecharge le fichier dans le bon format", () => {
-    test ("mon champ est validé", () => {
+    test ("mon champ est validé et ma NewBill est envoyé", () => {
       //je suis connecté en tant qu'employée
       Object.defineProperty(window, 'localStorage', { value: localStorageMock 
       })
@@ -66,22 +69,32 @@ describe("Given I am connected as an employee", () => {
       const newBill = new NewBill({ //je crée une nouvelle instance newbill
         document,
         onNavigate,
-        store: null,
+        store: mockStore,
         localStorage: window, localStorage,
       })
       //créa const pour fonction qui appel la fonction a tester
       const chargeFichier = jest.fn((e) => newBill.handleChangeFile(e))
       
       const fichier = screen.getByTestId("file")//cible le champ fichier
-      const testFormat = new File(["c'est un test"], {//condition du test
-        accept: "image/jpg"
+      const testFormat = new File(["c'est un test"],  "test.jpg", {//condition du test
+        type: "image/jpg"
       })
       fichier.addEventListener("change", chargeFichier)//écoute évènement
       fireEvent.change(fichier, {target: {files: [testFormat]}})//évènement au change en relation avec la condition du test
       
       expect(chargeFichier).toHaveBeenCalled()//je vérifie que le fichier est bien chargé
       expect(fichier.files[0]).toStrictEqual(testFormat)//je vérifie que le fichier téléchargé est bien conforme à la condition du test
+
+      const formNewBill = screen.getByTestId('form-new-bill')//cible le formulaire
+      expect(formNewBill).toBeTruthy()
+
+      const envoiNewBill = jest.fn((e) => newBill.handleSubmit(e))//simule la fonction
+      formNewBill.addEventListener('submit', envoiNewBill)//évènement au submit
+      fireEvent.submit(formNewBill)//simule l'évènement
+      expect(envoiNewBill).toHaveBeenCalled()
+      expect(screen.getByText('Mes notes de frais')).toBeTruthy()
     })
+  
   })
 
   describe("je telecharge le fichier dans un mauvais format", () => {
@@ -110,7 +123,7 @@ describe("Given I am connected as an employee", () => {
       const chargeFichier = jest.fn((e) => newBill.handleChangeFile(e))
       const fichier = screen.getByTestId("file")//cible le champ fichier
       const testFormat = new File(["c'est un test"], {//condition du test
-      type: "document.txt"
+      type: "document/txt"
       })
       fichier.addEventListener("change", chargeFichier)//écoute évènement
       fireEvent.change(fichier, {target: {files: [testFormat]}})//évènement au change en relation avec la condition du test
